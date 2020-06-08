@@ -1,50 +1,48 @@
 %{
 int COMMENT=0;
 %}
-identifier [a-zA-z]
+identifier [a-zA-Z][a-zA-Z0-9]*
 
 %%
 
-#.* {printf("\n%s   N/A   Library",yytext);}
+#.* {printf("\n%s   N/A   Kutuphane",yytext);}
 
-int {printf("\n%s       INT       Keyword",yytext);} 
-float {printf("\n%s     FLOAT     Keyword",yytext);} 
-char {printf("\n%s      CHAR      Keyword",yytext);} 
-double {printf("\n%s    DOUBLE    Keyword",yytext);} 
-while {printf("\n%s     WHILE     Keyword",yytext);} 
-for {printf("\n%s       FOR       Keyword",yytext);} 
-struct {printf("\n%s    STRUCT    Keyword",yytext);} 
-typedef {printf("\n%s   TYPEDEF   Keyword",yytext);} 
-do {printf("\n%s        DO        Keyword",yytext);} 
-if {printf("\n%s        IF        Keyword",yytext);} 
-break {printf("\n%s     BREAK     Keyword",yytext);} 
-continue {printf("\n%s  CONTINUE  Keyword",yytext);} 
-void {printf("\n%s      VOID      Keyword",yytext);} 
-switch {printf("\n%s    SWITCH    Keyword",yytext);} 
-return {printf("\n%s    RETURN    Keyword",yytext);} 
-else {printf("\n%s      ELSE      Keyword",yytext);} 
+int {printf("\n%s       INT       Anahtar Kelime",yytext);} 
+float {printf("\n%s     FLOAT     Anahtar Kelime",yytext);} 
+char {printf("\n%s      CHAR      Anahtar Kelime",yytext);} 
+double {printf("\n%s    DOUBLE    Anahtar Kelime",yytext);} 
+while {printf("\n%s     WHILE     Anahtar Kelime",yytext);} 
+for {printf("\n%s       FOR       Anahtar Kelime",yytext);} 
+struct {printf("\n%s    STRUCT    Anahtar Kelime",yytext);} 
+typedef {printf("\n%s   TYPEDEF   Anahtar Kelime",yytext);} 
+do {printf("\n%s        DO        Anahtar Kelime",yytext);} 
+if {printf("\n%s        IF        Anahtar Kelime",yytext);} 
+break {printf("\n%s     BREAK     Anahtar Kelime",yytext);} 
+continue {printf("\n%s  CONTINUE  Anahtar Kelime",yytext);} 
+void {printf("\n%s      VOID      Anahtar Kelime",yytext);} 
+switch {printf("\n%s    SWITCH    Anahtar Kelime",yytext);} 
+return {printf("\n%s    RETURN    Anahtar Kelime",yytext);} 
+else {printf("\n%s      ELSE      Anahtar Kelime",yytext);} 
 
-"/*" {COMMENT=1;} {printf("\n%s     Yorum     Identifier",yytext);} 
+"/*" {COMMENT=1;} {printf("\n%s     Yorum     Tanimlayici",yytext);} 
 
-\{ {if(!COMMENT) printf("\n%s    SParantez_ac     Ayrıştırıcı",yytext);}
+\{ {if(!COMMENT) printf("\n%s    SParantez_ac     Ayristirici",yytext);}
 
-\} {if(!COMMENT) printf("\n%s    SParantez_kapa   Ayrıştırıcı",yytext);}
+\} {if(!COMMENT) printf("\n%s    SParantez_kapa   Ayristirici",yytext);}
 
-\; {if(!COMMENT) printf("\n%s    Noktali_virgul   Ayrıştırıcı",yytext);}
+\; {if(!COMMENT) printf("\n%s    Noktali_virgul   Ayristirici",yytext);}
 
-\( {if(!COMMENT) printf("\n%s    Parantez_ac      Ayrıştırıcı",yytext);}
+\( {if(!COMMENT) printf("\n%s    Parantez_ac      Ayristirici",yytext);}
 
-\) {if(!COMMENT) printf("\n%s    Parantez_kapa    Ayrıştırıcı",yytext);}
+\) {if(!COMMENT) printf("\n%s    Parantez_kapa    Ayristirici",yytext);}
 
-\, {if(!COMMENT) printf("\n%s    Virgul           Ayrıştırıcı",yytext);}
+\, {if(!COMMENT) printf("\n%s    Virgul           Ayristirici",yytext);}
 
-\[ {if(!COMMENT) printf("\n%s    Kparantez_ac     Ayrıştırıcı",yytext);}
+\[ {if(!COMMENT) printf("\n%s    Kparantez_ac     Ayristirici",yytext);}
 
 \] {if(!COMMENT) printf("\n%s    Kparantez_kapa   Ayrıştırıcı",yytext);}
 
-{identifier} {if(!COMMENT) printf("\n%s    ID     Identifier",yytext);}
-
-[0-9]+ {if(!COMMENT) printf("\n%s    N/A     Number",yytext);}
+{identifier}(\[[0-9]*\])*? {if(!COMMENT)printf("\n%s    ID     Tanimlayici",yytext);}
 
 = {if(!COMMENT) printf("\n%s    Atama    Operator",yytext);}
 \< {if(!COMMENT) printf("\n%s    Kucuk    Operator",yytext);}
@@ -74,7 +72,7 @@ int main(int argc,char **argv)
 	printf("%s", "Dosya ismi....: ");
 
 	char* fileName;
-
+	
 	scanf("%s", fileName);
 
 	/*******************************************************************************/
