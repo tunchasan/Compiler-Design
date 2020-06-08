@@ -1,11 +1,11 @@
 %{
 int COMMENT=0;
 %}
-identifier [a-zA-z]
+identifier[a-zA-z][a-zA-Z0-9]*
 
 %%
 
-#.* {printf("\n%s   N/A   Library",yytext);}
+#.* {printf("\n%s   N/A   Kutuphane",yytext);}
 
 int {printf("\n%s       INT       Keyword",yytext);} 
 float {printf("\n%s     FLOAT     Keyword",yytext);} 
@@ -23,40 +23,35 @@ void {printf("\n%s      VOID      Keyword",yytext);}
 switch {printf("\n%s    SWITCH    Keyword",yytext);} 
 return {printf("\n%s    RETURN    Keyword",yytext);} 
 else {printf("\n%s      ELSE      Keyword",yytext);} 
+goto {printf("\n%s      GOTO      Keyword",yytext);}
 
-"/*" {COMMENT=1;} {printf("\n%s     Yorum     Identifier",yytext);} 
+"/*" {COMMENT=1;} {printf("\n%s     N/A     Identifier",yytext);} 
 
-\{ {if(!COMMENT) printf("\n%s    SParantez_ac     Ayrıştırıcı",yytext);}
+{identifier}\( {if(!COMMENT) printf("\n%s bir fonksiyondur\n",yytext);}
 
-\} {if(!COMMENT) printf("\n%s    SParantez_kapa   Ayrıştırıcı",yytext);}
+\{ {if(!COMMENT) printf("\nBlok baslangici");}
 
-\; {if(!COMMENT) printf("\n%s    Noktali_virgul   Ayrıştırıcı",yytext);}
+\} {if(!COMMENT) printf("\nBlok sonu");}
 
-\( {if(!COMMENT) printf("\n%s    Parantez_ac      Ayrıştırıcı",yytext);}
+{identifier}(\[[0-9]*\])? {if(!COMMENT) printf("\n%s bir tanımlayici(identifier)",yytext);}
 
-\) {if(!COMMENT) printf("\n%s    Parantez_kapa    Ayrıştırıcı",yytext);}
+\".*\" {if(!COMMENT) printf("\n%s bir katar",yytext);}
 
-\, {if(!COMMENT) printf("\n%s    Virgul           Ayrıştırıcı",yytext);}
+[0-9]+ {if(!COMMENT) printf("\n%s bir rakam",yytext);}
 
-\[ {if(!COMMENT) printf("\n%s    Kparantez_ac     Ayrıştırıcı",yytext);}
+\)(\;)? {if(!COMMENT) printf("\n\t"); ECHO; printf("\n");}
 
-\] {if(!COMMENT) printf("\n%s    Kparantez_kapa   Ayrıştırıcı",yytext);}
+\( ECHO;
 
-{identifier} {if(!COMMENT) printf("\n%s    ID     Identifier",yytext);}
+= {if(!COMMENT) printf("\n%s bir atama operatoru",yytext);}
 
-[0-9]+ {if(!COMMENT) printf("\n%s    N/A     Number",yytext);}
+\<= |
+\>= |
+\< |
+== |
+\> 
+= {if(!COMMENT) printf("\n%s bir iliskisel operator",yytext);}
 
-= {if(!COMMENT) printf("\n%s    Atama    Operator",yytext);}
-\< {if(!COMMENT) printf("\n%s    Kucuk    Operator",yytext);}
-== {if(!COMMENT) printf("\n%s    Esit     Operator",yytext);}
-\> {if(!COMMENT) printf("\n%s     Buyuk    Operator",yytext);}
-\+ {if(!COMMENT) printf("\n%s    Arti     Operator",yytext);}
-\- {if(!COMMENT) printf("\n%s    Eksi     Operator",yytext);}
-\* {if(!COMMENT) printf("\n%s    Carpma   Operator",yytext);}
-\/ {if(!COMMENT) printf("\n%s    Bolme    Operator",yytext);}
-\! {if(!COMMENT) printf("\n%s    Degil    Operator",yytext);}
-"||" {if(!COMMENT) printf("\n%s    Veya     Operator",yytext);}
-"&&" {if(!COMMENT) printf("\n%s    Ve       Operator",yytext);}
 %%
 
 // Belirtilen dosya üstünde gerekli işlemleri başlatan fonksiyon
