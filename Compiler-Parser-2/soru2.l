@@ -5,24 +5,13 @@
 %%
 
 [a-zA-Z_][a-zA-Z_0-9]* return TANIMLAYICI;
-[0-9]+(\.[0-9]*)? 	   return SAYI;
+[0-9]+(\.[0-9]*)?      return SAYI;
 
-int 		return INT;
-float 		return FLOAT;
-char 		return CHAR;
-double 		return DOUBLE;
-while 		return WHILE;
-for 		return FOR;
-struct 		return STRUCT;
-typedef 	return TYPEDEF;
-do 			return DO;
-if 			return IF;
-break 		return BREAK; 
-continue 	return CONTINUE;
-void 		return VOID;
-switch 		return SWITCH; 
-return 		return RETURN; 
-else 		return ELSE;
+\ int 			return INT;
+\ float 		return FLOAT;
+\ while 		return WHILE;
+\ if 			return IF;
+\ else 			return ELSE;
 
 "/*" 		return YORUM; 
 \{ 			return SPARANTEZ_AC;

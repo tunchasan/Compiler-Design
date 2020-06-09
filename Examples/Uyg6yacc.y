@@ -3,20 +3,20 @@
 	int valid=1;
 %}
 
-%token numm id op
+%token num id op
 
 %%
 
 start:	id'='s';'
 s: 	id x
-	| numm x       
-	| '-' numm x   
+	| num x       
+	| '-' num x   
 	| '(' s ')' x 
 	;
 x:	op s
 	| '-' s       
 	|             
-      	;
+    ;
 
 %%
 
