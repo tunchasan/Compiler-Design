@@ -9,7 +9,7 @@ void DosyaYaz(char*, char*, FILE*);
 
 %}
 
-identifier [a-zA-Z][a-zA-Z0-9]*
+identifier [a-zA-Z_][a-zA-Z_0-9]*
 
 %%
 
@@ -50,7 +50,7 @@ else { DosyaYaz(yytext,"      ELSE      Anahtar Kelime\n", outputFile);}
 
 {identifier}(\[[0-9]*\])*? {if(!COMMENT) DosyaYaz(yytext,"    ID  Tanimlayici\n", outputFile);}
 
-[0-9]+ {if(!COMMENT) printf(" ");}
+[0-9]+(\.[0-9]*)? { if(!COMMENT) printf(" ");}
 
 = {if(!COMMENT) DosyaYaz(yytext,"     Atama   Operator\n", outputFile);}
 \< {if(!COMMENT) DosyaYaz(yytext,"    Kucuk   Operator\n", outputFile);}
