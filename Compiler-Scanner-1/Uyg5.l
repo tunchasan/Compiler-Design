@@ -13,7 +13,7 @@ identifier [a-zA-Z_][a-zA-Z_0-9]*
 
 %%
 
-int { DosyaYaz(yytext,"       INT       Anahtar Kelime\n", outputFile);} 
+int { DosyaYaz(yytext,"       INT       Anahtar Kelime\n", outputFile); } 
 float { DosyaYaz(yytext,"     FLOAT     Anahtar Kelime\n", outputFile);}
 char { DosyaYaz(yytext,"      CHAR      Anahtar Kelime\n", outputFile);}
 double { DosyaYaz(yytext,"    DOUBLE    Anahtar Kelime\n", outputFile);}
