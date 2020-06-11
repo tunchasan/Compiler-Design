@@ -6,15 +6,17 @@ extern FILE *fp;
 
 %}
 
-%token INT FLOAT CHAR DOUBLE VOID
-%token FOR WHILE 
+%token SPARANTEZ_AC SPARANTEZ_KAPA NOKTALI_VIRGUL PARANTEZ_AC PARANTEZ_KAPA VIRGUL KPARANTEZ_AC KPARANTEZ_KAPA YORUM ATAMA OP DEGIL
+%token INT FLOAT
+%token WHILE 
 %token IF ELSE 
 %token NUM ID
 %token INCLUDE
+%token DOT
 
 %right '='
-%left AND OR
-%left '<' '>' LE GE EQ NE LT GT
+%left VE VEYA
+%left '<' '>' ESIT KUCUK BUYUK
 %%
 
 start: Function 
@@ -27,7 +29,6 @@ Declaration: Type Assignment ';'
 	| FunctionCall ';' 	
 	| ArrayUsage ';'	
 	| Type ArrayUsage ';'   
-	| StructStmt ';'	
 	| error	
 	;
 
@@ -89,18 +90,13 @@ StmtList:	StmtList Stmt
 	;
 Stmt:WhileStmt
 	| Declaration
-	| ForStmt
 	| IfStmt
-	| PrintFunc
 	| ';'
 	;
 
 /* Type Identifier block */
 Type: INT 
 	| FLOAT
-	| CHAR
-	| DOUBLE
-	| VOID 
 	;
 
 /* Loop Blocks */ 
@@ -108,31 +104,16 @@ WhileStmt: WHILE '(' Expr ')' Stmt
 	| WHILE '(' Expr ')' CompoundStmt 
 	;
 
-/* For Block */
-ForStmt: FOR '(' Expr ';' Expr ';' Expr ')' Stmt 
-       | FOR '(' Expr ';' Expr ';' Expr ')' CompoundStmt 
-       | FOR '(' Expr ')' Stmt 
-       | FOR '(' Expr ')' CompoundStmt 
-	   ;
-
 /* IfStmt Block */
 IfStmt: IF '(' Expr ')' 
 	 	Stmt 
 	;
 
-/* Struct Statement */
-StructStmt: STRUCT ID '{' Type Assignment '}'  
-	;
-
-
 /*Expression Block*/
 Expr:	
-	| Expr LE Expr 
-	| Expr GE Expr
-	| Expr NE Expr
-	| Expr EQ Expr
-	| Expr GT Expr
-	| Expr LT Expr
+	| Expr ESIT Expr
+	| Expr BUYUK Expr
+	| Expr KUCUK Expr
 	| Assignment
 	| ArrayUsage
     | '(' Expr ')'

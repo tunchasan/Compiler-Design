@@ -3,11 +3,12 @@
 	int valid=1;
 %}
 
+%token INT
 %token num id op
 
 %%
 
-start:	id'='s';'
+start:Type id'='s';'
 s: 	id x
 	| num x       
 	| '-' num x   
@@ -17,6 +18,9 @@ x:	op s
 	| '-' s       
 	|             
     ;
+
+Type: INT
+	;
 
 %%
 

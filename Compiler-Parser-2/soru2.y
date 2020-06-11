@@ -1,65 +1,180 @@
 %{
-	#include<stdio.h>
-	int valid=1;
+#include <stdio.h>
+#include <stdlib.h>
+
+extern FILE *fp;
+int flag = 0;
+
 %}
 
-%token ATAMA KUCUK ESIT BUYUK OP DEGIL VEYA VE SPARANTEZ_AC SPARANTEZ_KAPA NOKTALI_VIRGUL PARANTEZ_AC PARANTEZ_KAPA VIRGUL KPARANTEZ_AC KPARANTEZ_KAPA YORUM
-%token INT FLOAT CHAR DOUBLE
-%token WHILE
-%token IF ELSE
-%token STRUCT
+%token INT FLOAT 
+%token WHILE 
+%token IF ELSE 
 %token SAYI TANIMLAYICI
+%token INCLUDE
 
 %right '='
 %left VE VEYA
-%left '<' '>' KUCUK BUYUK
+%left '<' '>' ESIT KUCUK BUYUK
 %%
 
-start: Type Assignment ';'
-    | Assignment ';'
-    ;
+start: Function 
+	|  Declaration
+	;
 
+/* Declaration block */
+Declaration: Type Assignment ';' 
+	| Assignment ';'  	
+	| FunctionCall ';' 	
+	| ArrayUsage ';'	
+	| Type ArrayUsage ';'   
+	| error	
+	;
+
+/* Assignment block */
 Assignment: TANIMLAYICI '=' Assignment
-    | TANIMLAYICI ',' Assignment
-    | SAYI ',' Assignment
-    | TANIMLAYICI '+' Assignment
-    | TANIMLAYICI '-' Assignment
-    | TANIMLAYICI '*' Assignment
-    | TANIMLAYICI '/' Assignment
-    | SAYI '+' Assignment
-    | SAYI '-' Assignment
-    | SAYI '*' Assignment
-    | SAYI '/' Assignment
-    | '\'' Assignment '\''
-    | '(' Assignment ')'
-    | '-' '(' Assignment ')'
-    | '-' SAYI
-    | '-' TANIMLAYICI
-    |   SAYI
-    |   TANIMLAYICI
-    ;
+	| TANIMLAYICI '=' FunctionCall
+	| TANIMLAYICI '=' ArrayUsage
+	| ArrayUsage '=' Assignment
+	| ArrayUsage ',' Assignment
+    | ArrayUsage '+' Assignment
+    | ArrayUsage '-' Assignment
+    | ArrayUsage '/' Assignment
+    | ArrayUsage '*' Assignment
+	| TANIMLAYICI ',' Assignment
+	| SAYI ',' Assignment
+	| TANIMLAYICI '+' Assignment
+	| TANIMLAYICI '-' Assignment
+	| TANIMLAYICI '*' Assignment
+	| TANIMLAYICI '/' Assignment	
+	| SAYI '+' Assignment
+	| SAYI '-' Assignment
+	| SAYI '*' Assignment
+	| SAYI '/' Assignment
+	| '\'' Assignment '\''	
+	| '(' Assignment ')'
+	| '-' '(' Assignment ')'
+	| '-' SAYI
+	| '-' TANIMLAYICI
+    |   ArrayUsage
+	|   SAYI
+	|   TANIMLAYICI
+	;
 
-Type: INT
-    | FLOAT
-    | CHAR
-    | DOUBLE
-    ;
+FunctionCall: TANIMLAYICI'('')'
+	| TANIMLAYICI'('Assignment')'
+	;
+
+ArrayUsage: TANIMLAYICI'['Assignment']'
+    | TANIMLAYICI'['Assignment']''['Assignment']'
+	;
+
+Function: Type TANIMLAYICI '(' ArgListOpt ')' CompoundStmt 
+	;
+    
+ArgListOpt: ArgList
+	|
+	;
+
+ArgList:  ArgList ',' Arg
+	| Arg
+	;
+
+Arg:	Type TANIMLAYICI
+	;
+
+CompoundStmt:	'{' StmtList '}'
+	;
+
+StmtList:	StmtList Stmt
+	|
+	;
+
+Stmt:WhileStmt
+	| Declaration
+	| IfStmt
+	| ';'
+	;
+
+Type: INT 
+	| FLOAT
+	;
+
+WhileStmt: WHILE '(' Expr ')' Stmt  
+	| WHILE '(' Expr ')' CompoundStmt 
+	;
+
+IfStmt: IF '(' Expr ')' 
+	 	Stmt 
+	;
+
+Expr:	
+	| Expr ESIT Expr
+	| Expr BUYUK Expr
+	| Expr KUCUK Expr
+	| Assignment
+	| ArrayUsage
+    | '(' Expr ')'
+    | '!''(' Expr ')'
+	;
 %%
+#include"lex.yy.c"
+#include<ctype.h>
+int count=0;
 
-int yyerror()
+int main(int argc, char *argv[])
 {
-    printf("\nInvalid!\n");
-    valid=0;
+	FILE* outputFile;
+
+	outputFile = fopen("G171210377_soru2.txt", "w");
+
+	yyin = fopen(argv[1], "r");
+
+	yyparse();
+
+    if(flag == 0){
+
+	   printf("Girilen ifade gecerlidir.\n");
+
+	   fprintf(outputFile, "\nGirilen ifade gecerlidir.\n");
+
+	   fclose(outputFile);
+	}
+		
+	else {
+
+		printf("\nGirilen ifade gecersizdir.\n");
+
+	    fprintf(outputFile, "\nGirilen ifade gecersizdir.\n");
+
+		fclose(outputFile);
+	}
+
+	fclose(yyin);
+
     return 0;
 }
 
-int main()
-{
-    yyparse();
-    
-    if(valid)
-    {
-        printf("\nValid\n");
-    }
-}
+yyerror(char *s) {
+	
+	flag = 1;
 
+	FILE* outputFile;
+
+	outputFile = fopen("G171210377_soru2.txt", "w");
+
+    if (outputFile == NULL) {
+
+        printf("Cikti dosyasi olusturma hatasi...");
+
+        exit(1);
+    }
+
+	fprintf(outputFile, "%d : %s %s\n", yylineno, s, yytext );
+
+	printf("%d : %s %s\n", yylineno, s, yytext );
+
+	printf("\nKod Derleneme Hatası.\n");
+
+	fclose(outputFile);
+}

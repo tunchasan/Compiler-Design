@@ -1,45 +1,27 @@
-%{
-	#include "y.tab.h"
-%}
-
 %%
+[ \t]	;
+[ \n]   { yylineno = yylineno + 1;}
 
-[a-zA-Z_][a-zA-Z_0-9]* return TANIMLAYICI;
+int	    return INT;
+float   return FLOAT;
+while	return WHILE;
+if	    return IF;
+else	return ELSE;
+
+^"#include ".+ ;
+
 [0-9]+(\.[0-9]*)?      return SAYI;
+[a-zA-Z_][a-zA-Z_0-9]* return TANIMLAYICI;
 
-\ int 			return INT;
-\ float 		return FLOAT;
-\ while 		return WHILE;
-\ if 			return IF;
-\ else 			return ELSE;
+"=="    return ESIT;
+">"	    return BUYUK;
+"<"	    return KUCUK;
+"||" 	return VEYA;
+"&&" 	return VE;
 
-"/*" 		return YORUM; 
-\{ 			return SPARANTEZ_AC;
-\} 			return SPARANTEZ_KAPA;
-\; 			return NOKTALI_VIRGUL;
-\( 			return PARANTEZ_AC;
-\) 			return PARANTEZ_KAPA;
-\, 			return VIRGUL;
-\[ 			return KPARANTEZ_AC;
-\] 			return KPARANTEZ_KAPA;
+\/\/.* ;
+\/\*(.*\n)*.*\*\/ ;
 
-= 			return ATAMA;
-\< 			return KUCUK;
-== 			return ESIT;
-\> 			return BUYUK;
-\+ 			return OP;
-\- 			return OP;
-\* 			return OP;
-\/ 			return OP;
-\! 			return DEGIL;
-"||" 		return VEYA;
-"&&" 		return VE;
-.  			return yytext[0];
-\n 			return 0;
+.       return yytext[0];
 
 %%
-
-int yywrap()
-{
-	return (1);
-}
