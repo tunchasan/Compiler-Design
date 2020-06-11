@@ -174,6 +174,8 @@ yyerror(char *s) {
 
 	printf("%d : %s %s\n", yylineno, s, yytext );
 
+	
+
 	printf("\nKod Derleneme Hatası.\n");
 
 	fclose(outputFile);
