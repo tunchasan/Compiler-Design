@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 extern FILE *fp;
-FILE* inputFile;
+char* fileName;
 int flag = 0;
 
 %}
@@ -125,30 +125,31 @@ int count=0;
 
 int main(int argc, char *argv[])
 {
-	char ch;
-
-	inputFile = fopen(argv[1], "r");
-
-	while ((ch = fgetc(inputFile)) != EOF){
-		printf("%s", ch);
+	if(argc < 2){
+		printf("Yanlış kullanım. Örnek (./a.out input.c)\n");
+		return 0;
 	}
 
-	yyin = inputFile;
+	fileName = argv[1];
+
+	yyin = fopen(argv[1], "r");
 
 	yyparse();
+
+	fclose(yyin);
 
     if(flag == 0){
 
 	   printf("Girilen ifade gecerlidir.\n");
 
-	   createOutput(0, inputFile);
+	   createOutput(0, yyin);
 	}
 		
 	else {
 
 		printf("\nGirilen ifade gecersizdir.\n");
 
-		createOutput(1, inputFile);
+		createOutput(1, yyin);
 	}
 
     return 0;
@@ -163,9 +164,20 @@ yyerror(char *s) {
 	printf("\nKod Derleneme Hatası.\n");
 }
 
-void createOutput(int status, FILE* source){
+void createOutput(int status){
 
- 
+   FILE* file;
+
+   file = fopen(fileName, "r");
+
+   if (file == NULL)
+   {
+      fclose(file);
+      printf("Press any key to exit...\n");
+      exit(EXIT_FAILURE);
+   }
+
+   char ch;
 
    FILE* target;
 
@@ -173,12 +185,12 @@ void createOutput(int status, FILE* source){
 
    if (target == NULL)
    {
-      fclose(source);
+      fclose(target);
       printf("Press any key to exit...\n");
       exit(EXIT_FAILURE);
    }
 
-   while ((ch = fgetc(source)) != EOF)
+   while ((ch = fgetc(file)) != EOF)
       fputc(ch, target);
 
    if(status == 0)
@@ -186,7 +198,7 @@ void createOutput(int status, FILE* source){
    else
 	    fprintf(target,"\n\n---------------------------------------------------\n\nGirilen ifade gecersizdir.\n"); 
    
-   fclose(source);
+   fclose(file);
 
    fclose(target);
 }

@@ -7,13 +7,17 @@
 		char arg1[10];
 		char arg2[10];
 		char result[10];
+
 	}QUAD[30];
+
 	struct stack
 	{
 		int items[100];
 		int top;
 	}stk;
+
 	int Index=0,tIndex=0,StNo,Ind,tInd;
+
 	extern int LineNo;
 %}
 %union
@@ -28,7 +32,7 @@
 
 %%
 
-PROGRAM : MAIN BLOCK;
+PROGRAM : TYPE MAIN BLOCK;
 BLOCK: '{' CODE '}';
 CODE: BLOCK | STATEMENT CODE | STATEMENT;
 STATEMENT: DESCT ';' | ASSIGNMENT ';' | CONDST | WHILEST;
@@ -68,6 +72,7 @@ IFST: IF '(' CONDITION ')' {
 	push(Index);
 	Index++;
 }
+
 BLOCK { strcpy(QUAD[Index].op,"GOTO"); strcpy(QUAD[Index].arg1,""); 
 	strcpy(QUAD[Index].arg2,"");
 	strcpy(QUAD[Index].result,"-1");
@@ -86,11 +91,13 @@ BLOCK{
 	sprintf(QUAD[Ind].result,"%d",Index);
 };
 
-CONDITION: VAR RELOP VAR {AddQuadruple($2,$1,$3,$$);
-			StNo=Index-1;
-			}
+CONDITION: VAR RELOP VAR {AddQuadruple($2,$1,$3,$$); StNo=Index-1;}
+| VAR RELOP NUM {AddQuadruple($2,$1,$3,$$); StNo=Index-1;}
+| NUM RELOP VAR {AddQuadruple($2,$1,$3,$$); StNo=Index-1;}
+| NUM RELOP NUM {AddQuadruple($2,$1,$3,$$); StNo=Index-1;}
 | VAR
-| NUM;
+| NUM
+;
 
 WHILEST: WHILELOOP{
 		Ind=pop();
@@ -122,6 +129,11 @@ extern FILE *yyin;
 int main(int argc,char *argv[])
 {
 	FILE *fp;
+
+	FILE *outputFile;
+
+	outputFile = fopen("G171210377_soru3.txt", "a");
+
 	int i;
 	if(argc>1)
 	{
@@ -138,9 +150,14 @@ int main(int argc,char *argv[])
 	for(i=0;i<Index;i++)
 	{
 		printf("\n\t\t %d\t %s\t %s\t %s\t%s",i,QUAD[i].op,QUAD[i].arg1,QUAD[i].arg2,QUAD[i].result);
+
+		fprintf(outputFile, "\n\t\t %s\t %s\t %s\t%s",QUAD[i].op,QUAD[i].arg1,QUAD[i].arg2,QUAD[i].result);
 	}
+	fclose(outputFile);
 	printf("\n\t\t -----------------------");
+
 	printf("\n\n"); 
+
 	return 0;
 }
 
@@ -180,3 +197,5 @@ yyerror()
 {
 	printf("\n Error on line no:%d",LineNo);
 }
+
+int yywrap(){return(1);}
