@@ -13,6 +13,11 @@ int main()
 	scanf("%s",&fname);
 	fp1=fopen(fname,"r");
 	fp2=fopen("G171210377_soru4.txt","w");
+	if(fp1==NULL || fp2==NULL)
+	{
+		printf("\n Error opening the file");
+		exit(0);
+	}
 
 	while(!feof(fp1))
 	{
@@ -106,7 +111,7 @@ int main()
 	fclose(fp2);
 	fclose(fp1);
 
-	fp2=fopen("target.txt","r");
+	fp2=fopen("G171210377_soru4.txt","r");
 	if(fp2==NULL)
 	{
 		printf("Error opening the file\n");
