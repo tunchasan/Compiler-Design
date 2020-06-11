@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 extern FILE *fp;
+FILE* inputFile;
 int flag = 0;
 
 %}
@@ -124,11 +125,15 @@ int count=0;
 
 int main(int argc, char *argv[])
 {
-	FILE* outputFile;
+	char ch;
 
-	outputFile = fopen("G171210377_soru2.txt", "w");
+	inputFile = fopen(argv[1], "r");
 
-	yyin = fopen(argv[1], "r");
+	while ((ch = fgetc(inputFile)) != EOF){
+		printf("%s", ch);
+	}
+
+	yyin = inputFile;
 
 	yyparse();
 
@@ -136,21 +141,15 @@ int main(int argc, char *argv[])
 
 	   printf("Girilen ifade gecerlidir.\n");
 
-	   fprintf(outputFile, "\nGirilen ifade gecerlidir.\n");
-
-	   fclose(outputFile);
+	   createOutput(0, inputFile);
 	}
 		
 	else {
 
 		printf("\nGirilen ifade gecersizdir.\n");
 
-	    fprintf(outputFile, "\nGirilen ifade gecersizdir.\n");
-
-		fclose(outputFile);
+		createOutput(1, inputFile);
 	}
-
-	fclose(yyin);
 
     return 0;
 }
@@ -159,24 +158,35 @@ yyerror(char *s) {
 	
 	flag = 1;
 
-	FILE* outputFile;
-
-	outputFile = fopen("G171210377_soru2.txt", "w");
-
-    if (outputFile == NULL) {
-
-        printf("Cikti dosyasi olusturma hatasi...");
-
-        exit(1);
-    }
-
-	fprintf(outputFile, "%d : %s %s\n", yylineno, s, yytext );
-
 	printf("%d : %s %s\n", yylineno, s, yytext );
 
-	
-
 	printf("\nKod Derleneme Hatası.\n");
+}
 
-	fclose(outputFile);
+void createOutput(int status, FILE* source){
+
+ 
+
+   FILE* target;
+
+   target = fopen("G171210377_soru2.txt", "w");
+
+   if (target == NULL)
+   {
+      fclose(source);
+      printf("Press any key to exit...\n");
+      exit(EXIT_FAILURE);
+   }
+
+   while ((ch = fgetc(source)) != EOF)
+      fputc(ch, target);
+
+   if(status == 0)
+	    fprintf(target,"\n\n+++++++++++++++++++++++++++++++++++++++++++++++++++\n\nGirilen ifade gecerlidir.\n");
+   else
+	    fprintf(target,"\n\n---------------------------------------------------\n\nGirilen ifade gecersizdir.\n"); 
+   
+   fclose(source);
+
+   fclose(target);
 }
