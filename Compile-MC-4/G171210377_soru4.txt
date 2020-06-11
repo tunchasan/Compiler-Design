@@ -3,7 +3,7 @@ Row 1 >>
 	 STORE 0 i
 Row 2 >> 
  	 LOAD i,R0
-	 JLT 100,label#533754300
+	 JLT 100,label#1063671740
 Row 3 >> 
 	 STORE t0 FALSE
 Row 4 >> 
@@ -11,7 +11,7 @@ Row 5 >>
 	 STORE 0 j
 Row 6 >> 
  	 LOAD j,R0
-	 JLT 100,label#533754300
+	 JLT 100,label#1063671740
 Row 7 >> 
 	 STORE t1 FALSE
 Row 8 >> 
@@ -29,7 +29,7 @@ Row 16 >>
 	 STORE 0 k
 Row 17 >> 
  	 LOAD k,R0
-	 JLT 100,label#533754300
+	 JLT 100,label#1063671740
 Row 18 >> 
 	 STORE t3 FALSE
 Row 19 >> 
