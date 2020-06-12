@@ -73,6 +73,8 @@ int yywrap();
 
 int main(int argc,char **argv)
 {
+	remove("G171210377_soru1.txt");
+
 	/*******************************************************************************/
 	// Kullanıcıdan dosya ismi alma
 
