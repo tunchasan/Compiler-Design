@@ -2,4 +2,4 @@ gcc soru4.c
 ./a.out
 
 ******************
-G171210377soru3.txt -> is a intermediate code.
+Use Compiler-AST-3's output.txt file as intermediate code.
