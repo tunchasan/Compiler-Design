@@ -26,7 +26,7 @@
 }
 %token <var> NUM VAR RELOP
 %token MAIN IF ELSE WHILE TYPE
-%type <var> EXPR ASSIGNMENT CONDITION IFST ELSEST WHILELOOP
+%type <var> EXPR ASSIGNMENT CONDITION IFST IFST1 ELSEST WHILELOOP
 %left '-' '+'
 %left '*' '/'
 
@@ -38,6 +38,7 @@ CODE: BLOCK | STATEMENT CODE | STATEMENT;
 STATEMENT: DESCT ';' | ASSIGNMENT ';' | CONDST | WHILEST;
 DESCT: TYPE VARLIST;
 VARLIST: VAR ',' VARLIST | VAR ;
+
 ASSIGNMENT: VAR '=' EXPR{ 
 	strcpy(QUAD[Index].op,"=");
 	strcpy(QUAD[Index].arg1,$3);
@@ -62,7 +63,14 @@ CONDST: IFST{
 	Ind=pop();
 	sprintf(QUAD[Ind].result,"%d",Index);
 	}
-| IFST ELSEST;
+|IFST1{
+	Ind=pop();
+	sprintf(QUAD[Ind].result,"%d",Index);
+	Ind=pop();
+	sprintf(QUAD[Ind].result,"%d",Index);
+	}
+| IFST ELSEST
+| IFST1 ELSEST;
 
 IFST: IF '(' CONDITION ')' {
 	strcpy(QUAD[Index].op,"==");
@@ -72,7 +80,21 @@ IFST: IF '(' CONDITION ')' {
 	push(Index);
 	Index++;
 }
+BLOCK { strcpy(QUAD[Index].op,"GOTO"); strcpy(QUAD[Index].arg1,""); 
+	strcpy(QUAD[Index].arg2,"");
+	strcpy(QUAD[Index].result,"-1");
+	push(Index);
+	Index++;
+};
 
+IFST1: IF '(' '!' '(' CONDITION ')' ')' {
+	strcpy(QUAD[Index].op,"==");
+	strcpy(QUAD[Index].arg1,$5);
+	strcpy(QUAD[Index].arg2,"FALSE");
+	strcpy(QUAD[Index].result,"-1");
+	push(Index);
+	Index++;
+}
 BLOCK { strcpy(QUAD[Index].op,"GOTO"); strcpy(QUAD[Index].arg1,""); 
 	strcpy(QUAD[Index].arg2,"");
 	strcpy(QUAD[Index].result,"-1");
@@ -132,7 +154,7 @@ int main(int argc,char *argv[])
 
 	FILE *outputFile;
 
-	outputFile = fopen("G171210377_soru3.txt", "a");
+	outputFile = fopen("G171210377soru3.txt", "w");
 
 	int i;
 	if(argc>1)

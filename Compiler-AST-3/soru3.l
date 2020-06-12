@@ -4,6 +4,7 @@
 #include<string.h>
 int LineNo=1;
 %}
+
 identifier [a-zA-Z][_a-zA-Z0-9]*
 number [0-9]+|([0-9]*\.[0-9]+)
 
@@ -16,8 +17,9 @@ while return WHILE;
 int |
 char |
 float return TYPE;
-{identifier} {strcpy(yylval.var,yytext);
-return VAR;}
+{identifier}("["[0-9]+"]")+ {strcpy(yylval.var,yytext);return VAR;}
+{identifier}("["[a-zA-Z]+"]")+ {strcpy(yylval.var,yytext);return VAR;}
+{identifier} {strcpy(yylval.var,yytext);return VAR;}
 {number} {strcpy(yylval.var,yytext);
 return NUM;}
 \< |
@@ -29,5 +31,8 @@ return RELOP;}
 [ \t] ;
 \n LineNo++;
 . return yytext[0];
+
+\/\/.* ;
+\/\*(.*\n)*.*\*\/ ;
 
 %% 
