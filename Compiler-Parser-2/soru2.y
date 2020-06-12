@@ -105,8 +105,8 @@ WhileStmt: WHILE '(' Expr ')' Stmt
 	| WHILE '(' Expr ')' CompoundStmt 
 	;
 
-IfStmt: IF '(' Expr ')' 
-	 	Stmt 
+IfStmt: IF '(' Expr ')' Stmt 
+	|   IF '(' Expr ')' CompoundStmt 
 	;
 
 Expr:	
